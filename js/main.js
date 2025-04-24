@@ -1,36 +1,49 @@
-// Initialize game when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('gameCanvas');
-    const game = new Game(canvas);
+document.addEventListener('DOMContentLoaded', function() {
+    const game = new Game('gameCanvas');
+    window.game = game;
 
-    // Set up difficulty buttons
-    const difficultyButtons = {
-        beginner: document.getElementById('beginner-btn'),
-        intermediate: document.getElementById('intermediate-btn'),
-        advanced: document.getElementById('advanced-btn')
+    // Music controls
+    const music = document.getElementById('pacman-music');
+    document.getElementById('start-btn').addEventListener('click', () => {
+        if (music.paused) {
+            music.currentTime = 0;
+            music.volume = 0.5;
+            music.play();
+        }
+    });
+    document.getElementById('pause-btn').addEventListener('click', () => {
+        if (game.gameState === 'playing') {
+            game.togglePause();
+            music.pause();
+        } else if (game.gameState === 'paused') {
+            game.togglePause();
+            if (music.paused) music.play();
+        }
+    });
+
+    // Pause music when game is over or level complete
+    const originalGameOver = game.gameOver.bind(game);
+    game.gameOver = function() {
+        music.pause();
+        originalGameOver();
+    };
+    const originalLevelComplete = game.levelComplete.bind(game);
+    game.levelComplete = function() {
+        music.pause();
+        originalLevelComplete();
     };
 
-    // Difficulty selection
-    Object.entries(difficultyButtons).forEach(([difficulty, button]) => {
-        button.addEventListener('click', () => {
-            // Update active button
-            Object.values(difficultyButtons).forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            
-            // Update game difficulty
-            game.setDifficulty(difficulty);
-        });
-    });
-
-    // Start button
-    const startButton = document.getElementById('start-btn');
-    startButton.addEventListener('click', () => {
-        game.start();
-    });
-
-    // Pause button
-    const pauseButton = document.getElementById('pause-btn');
-    pauseButton.addEventListener('click', () => {
-        game.togglePause();
+    // Listen for spacebar and 'p' to pause/unpause (fix: only on first press, not repeats)
+    window.addEventListener('keydown', (e) => {
+        if ((e.code === 'Space' || e.key === 'p' || e.key === 'P') && !e.repeat) {
+            e.preventDefault();
+            if (game.gameState === 'playing') {
+                game.togglePause();
+                music.pause();
+            } else if (game.gameState === 'paused') {
+                game.togglePause();
+                if (music.paused) music.play();
+            }
+        }
     });
 });
