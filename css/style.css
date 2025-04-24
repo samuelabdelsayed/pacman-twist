@@ -1,0 +1,152 @@
+:root {
+    --pacman-yellow: #ffcc00;
+    --ghost-red: #ff0000;
+    --ghost-pink: #ffb8ff;
+    --ghost-blue: #00ffff;
+    --ghost-orange: #ffb852;
+    --maze-blue: #1919a6;
+    --dot-color: #ffffff;
+    --power-pellet: #ffaaaa;
+    --background-color: #000033;
+    --text-color: #ffffff;
+    --header-bg: #0c0c4d;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.game-container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--header-bg);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+}
+
+h1 {
+    color: var(--pacman-yellow);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 2rem;
+    text-transform: uppercase;
+}
+
+.score-container, .lives-container, .level-container {
+    padding: 5px 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    font-size: 1.2rem;
+    border: 2px solid var(--pacman-yellow);
+}
+
+.game-area {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    border: 6px solid var(--maze-blue);
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(25, 25, 166, 0.7);
+    overflow: hidden;
+}
+
+canvas {
+    background-color: black;
+    display: block;
+}
+
+.controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.difficulty-selector {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    background-color: var(--maze-blue);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    background-color: #2a2ad0;
+}
+
+button.active {
+    background-color: var(--pacman-yellow);
+    color: black;
+    font-weight: bold;
+}
+
+#start-btn {
+    background-color: #00cc00;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+}
+
+#pause-btn {
+    background-color: #ff9900;
+}
+
+.instructions {
+    width: 100%;
+    padding: 20px;
+    background-color: rgba(25, 25, 166, 0.2);
+    border-radius: 10px;
+    border: 2px solid var(--maze-blue);
+    margin-top: 20px;
+}
+
+.instructions h2 {
+    color: var(--pacman-yellow);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.instructions ul {
+    list-style-type: none;
+    padding: 10px;
+}
+
+.instructions li {
+    margin: 5px 0;
+    color: var(--text-color);
+}

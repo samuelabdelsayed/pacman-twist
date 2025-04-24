@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful Pacman Game</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>Pacman</h1>
+            <div class="score-container">Score: <span id="score">0</span></div>
+            <div class="lives-container">Lives: <span id="lives">3</span></div>
+            <div class="level-container">Level: <span id="current-level">1</span></div>
+        </div>
+
+        <div class="game-area">
+            <canvas id="gameCanvas" width="600" height="600"></canvas>
+        </div>
+
+        <div class="controls">
+            <div class="difficulty-selector">
+                <button id="beginner-btn" class="active">Beginner</button>
+                <button id="intermediate-btn">Intermediate</button>
+                <button id="advanced-btn">Advanced</button>
+            </div>
+            <button id="start-btn">Start Game</button>
+            <button id="pause-btn">Pause</button>
+        </div>
+
+        <div class="instructions">
+            <h2>How to Play</h2>
+            <p>Use arrow keys to move Pacman. Eat all dots while avoiding ghosts. Power pellets make ghosts vulnerable!</p>
+            <ul>
+                <li>Arrow keys or WASD to move</li>
+                <li>Space to start/pause</li>
+                <li>P to pause</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="js/constants.js"></script>
+    <script src="js/sprites.js"></script>
+    <script src="js/levels.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
