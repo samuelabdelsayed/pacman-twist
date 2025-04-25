@@ -5,7 +5,6 @@ class Game {
             console.error('Canvas element not found:', canvasId);
             return;
         }
-        
         this.ctx = this.canvas.getContext('2d');
         this.score = 0;
         this.lives = 3;
@@ -14,6 +13,7 @@ class Game {
         this.gameState = GAME_STATES.MENU;
         this.pacman = null;
         this.ghosts = [];
+        this.grimReaper = null;
         this.dots = [];
         this.powerPellets = [];
         this.fruit = null;
@@ -21,8 +21,6 @@ class Game {
         this.currentAnimation = null;
         this.speedMultiplier = 1.0;
         this.mazeColor = '#1919A6';
-        
-        console.log('Game initialized with canvas size:', this.canvas.width, 'x', this.canvas.height);
         this.initializeLevel();
         this.setupEventListeners();
     }
@@ -30,7 +28,6 @@ class Game {
     setupEventListeners() {
         window.addEventListener('keydown', (e) => {
             if (!this.pacman || this.gameState !== GAME_STATES.PLAYING) return;
-            
             switch(e.key) {
                 case 'ArrowLeft':
                 case 'a':
@@ -51,15 +48,6 @@ class Game {
             }
         });
 
-        document.getElementById('start-btn').addEventListener('click', () => {
-            console.log('Start button clicked');
-            this.start();
-        });
-
-        document.getElementById('pause-btn').addEventListener('click', () => {
-            // Pause logic handled in main.js for music sync
-        });
-
         document.getElementById('beginner-btn').addEventListener('click', () => {
             this.changeDifficulty('beginner');
         });
@@ -74,18 +62,23 @@ class Game {
     }
 
     start() {
-        console.log('Starting game');
         this.gameState = GAME_STATES.PLAYING;
         this.ghosts.forEach((ghost, i) => {
             ghost.penDwellTime = 100 + (i * 60);
         });
+        if (this.grimReaper) {
+            this.grimReaper.penDwellTime = 120;
+        }
         this.gameLoop();
     }
 
     togglePause() {
         if (this.gameState === GAME_STATES.PLAYING) {
             this.gameState = GAME_STATES.PAUSED;
-            cancelAnimationFrame(this.currentAnimation);
+            if (this.currentAnimation) {
+                cancelAnimationFrame(this.currentAnimation);
+                this.currentAnimation = null;
+            }
         } else if (this.gameState === GAME_STATES.PAUSED) {
             this.gameState = GAME_STATES.PLAYING;
             this.gameLoop();
@@ -98,6 +91,9 @@ class Game {
             btn.classList.remove('active');
         });
         document.getElementById(`${difficulty}-btn`).classList.add('active');
+        this.level = 1;
+        this.score = 0;
+        this.lives = 3;
         this.initializeLevel();
     }
 
@@ -111,6 +107,10 @@ class Game {
         this.ghosts.forEach(ghost => {
             ghost.move(this.maze, this.pacman.getGridPosition(), 'chase', this.speedMultiplier);
         });
+
+        if (this.grimReaper) {
+            this.grimReaper.move(this.maze, this.pacman.getGridPosition(), this.speedMultiplier);
+        }
 
         this.powerPellets.forEach(pellet => {
             pellet.update();
@@ -129,9 +129,7 @@ class Game {
 
     checkCollisions() {
         if (!this.pacman) return;
-        
         const pacmanPos = this.pacman.getGridPosition();
-        
         for (let i = this.dots.length - 1; i >= 0; i--) {
             const dot = this.dots[i];
             const dotPos = dot.getGridPosition();
@@ -141,7 +139,6 @@ class Game {
                 break;
             }
         }
-        
         for (let i = this.powerPellets.length - 1; i >= 0; i--) {
             const pellet = this.powerPellets[i];
             const pelletPos = pellet.getGridPosition();
@@ -152,7 +149,6 @@ class Game {
                 break;
             }
         }
-        
         this.ghosts.forEach(ghost => {
             const ghostPos = ghost.getGridPosition();
             if (pacmanPos.x === ghostPos.x && pacmanPos.y === ghostPos.y) {
@@ -167,14 +163,19 @@ class Game {
                 }
             }
         });
-        
+        // Grim Reaper collision (hard mode only)
+        if (this.grimReaper) {
+            const grimPos = this.grimReaper.getGridPosition();
+            if (pacmanPos.x === grimPos.x && pacmanPos.y === grimPos.y) {
+                this.loseLife();
+            }
+        }
         if (!this.fruit?.visible && Math.random() < 0.0005) {
             const fruitPos = this.getRandomEmptyPosition();
             if (fruitPos && this.fruit) {
                 this.fruit.spawn(fruitPos.x * TILE_SIZE, fruitPos.y * TILE_SIZE);
             }
         }
-        
         if (this.fruit?.visible) {
             const fruitPos = this.fruit.getGridPosition();
             if (pacmanPos.x === fruitPos.x && pacmanPos.y === fruitPos.y) {
@@ -216,6 +217,7 @@ class Game {
                 ghost.makeVulnerable(300);
             }
         });
+        // Grim Reaper is never vulnerable
     }
 
     loseLife() {
@@ -255,6 +257,11 @@ class Game {
             ghost.penDwellTime = 100 + (index * 60);
             this.resetGhostPosition(ghost);
         });
+        if (this.grimReaper) {
+            this.grimReaper.inPen = true;
+            this.grimReaper.penDwellTime = 120;
+            this.resetGhostPosition(this.grimReaper);
+        }
     }
 
     gameOver() {
@@ -290,6 +297,10 @@ class Game {
     levelComplete() {
         this.gameState = GAME_STATES.LEVEL_COMPLETE;
         this.level++;
+        if (this.level > LEVELS[this.difficulty].length) {
+            this.level = 1;
+        }
+        this.initializeLevel();
         this.drawLevelComplete();
         if (this.currentAnimation) {
             cancelAnimationFrame(this.currentAnimation);
@@ -319,6 +330,9 @@ class Game {
             this.fruit.draw(this.ctx);
         }
         this.ghosts.forEach(ghost => ghost.draw(this.ctx));
+        if (this.grimReaper) {
+            this.grimReaper.draw(this.ctx);
+        }
         if (this.pacman) {
             this.pacman.draw(this.ctx);
         }
@@ -390,26 +404,22 @@ class Game {
     }
 
     initializeLevel() {
-        console.log('Initializing level for difficulty:', this.difficulty);
         this.gameState = GAME_STATES.MENU;
         if (this.currentAnimation) {
             cancelAnimationFrame(this.currentAnimation);
             this.currentAnimation = null;
         }
-        if (LEVELS[this.difficulty]) {
-            this.maze = JSON.parse(JSON.stringify(LEVELS[this.difficulty]));
-        } else {
-            console.error('Invalid difficulty level:', this.difficulty);
-            this.maze = JSON.parse(JSON.stringify(LEVELS.beginner));
-        }
+        const layouts = LEVELS[this.difficulty];
+        const levelIndex = ((this.level - 1) % layouts.length);
+        this.maze = JSON.parse(JSON.stringify(layouts[levelIndex]));
         this.setupGameObjects();
         this.draw();
     }
 
     setupGameObjects() {
-        console.log('Setting up game objects');
         this.pacman = null;
         this.ghosts = [];
+        this.grimReaper = null;
         this.dots = [];
         this.powerPellets = [];
         this.fruit = new Fruit();
@@ -424,7 +434,6 @@ class Game {
                         break;
                     case CELL_TYPE.PACMAN_SPAWN:
                         this.pacman = new Pacman(posX, posY);
-                        console.log('Created Pacman at', x, y, '(', posX, posY, ')');
                         this.dots.push(new Dot(posX, posY));
                         break;
                     case CELL_TYPE.GHOST_SPAWN:
@@ -436,7 +445,6 @@ class Game {
                                 GHOST_COLORS.CLYDE
                             ];
                             this.ghosts.push(new Ghost(posX, posY, ghostColors[this.ghosts.length]));
-                            console.log('Created Ghost at', x, y);
                         }
                         break;
                     case CELL_TYPE.POWER_PELLET:
@@ -449,7 +457,6 @@ class Game {
             const defaultX = Math.floor(this.maze[0].length / 2);
             const defaultY = this.maze.length - 2;
             this.pacman = new Pacman(defaultX * TILE_SIZE, defaultY * TILE_SIZE);
-            console.log('Created default Pacman at', defaultX, defaultY);
         }
         if (this.difficulty === 'beginner') {
             this.speedMultiplier = 0.8;
@@ -459,6 +466,9 @@ class Game {
             this.ghosts = this.ghosts.slice(0, 3);
         } else {
             this.speedMultiplier = 1.2;
+            // Add Grim Reaper for hard mode
+            const spawn = this.ghosts[0] || {x: 9 * TILE_SIZE, y: 9 * TILE_SIZE};
+            this.grimReaper = new GrimReaper(spawn.x, spawn.y);
         }
     }
 }

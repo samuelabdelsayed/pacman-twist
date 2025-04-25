@@ -1,7 +1,6 @@
 const TILE_SIZE = 30;
 const GAME_SPEED = 60;
 
-// Game states
 const GAME_STATES = {
     MENU: 'menu',
     PLAYING: 'playing',
@@ -10,7 +9,6 @@ const GAME_STATES = {
     LEVEL_COMPLETE: 'level_complete'
 };
 
-// Points
 const POINTS = {
     DOT: 10,
     POWER_PELLET: 50,
@@ -18,7 +16,6 @@ const POINTS = {
     FRUIT: 100
 };
 
-// Directions
 const DIRECTIONS = {
     NONE: { dx: 0, dy: 0 },
     RIGHT: { dx: 1, dy: 0 },
@@ -27,7 +24,6 @@ const DIRECTIONS = {
     DOWN: { dx: 0, dy: 1 }
 };
 
-// Ghost colors
 const GHOST_COLORS = {
     BLINKY: '#FF0000',
     PINKY: '#FFB8FF',
@@ -35,7 +31,6 @@ const GHOST_COLORS = {
     CLYDE: '#FFB852'
 };
 
-// Ghost states
 const GHOST_STATES = {
     SCATTER: 'scatter',
     CHASE: 'chase',
@@ -43,7 +38,6 @@ const GHOST_STATES = {
     EATEN: 'eaten'
 };
 
-// Cell types for maze
 const CELL_TYPE = {
     EMPTY: 0,
     WALL: 1,
@@ -52,3 +46,5 @@ const CELL_TYPE = {
     POWER_PELLET: 4,
     TUNNEL: 5
 };
+
+window.GAME_STATES = GAME_STATES;

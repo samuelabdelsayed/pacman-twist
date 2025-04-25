@@ -2,39 +2,120 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pacman Game</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Pacman</title>
+    <style>
+        body { background: #000; color: #fff; font-family: Arial, sans-serif; }
+        #game-container { text-align: center; margin-top: 30px; }
+        canvas { background: #111; display: block; margin: 0 auto; }
+        .hud { margin: 10px auto; }
+        .difficulty-buttons button {
+            border: none;
+            padding: 8px 18px;
+            margin: 0 4px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #fff;
+            transition: background 0.2s, color 0.2s;
+        }
+        #beginner-btn { background: #4CAF50; }
+        #beginner-btn.active, #beginner-btn:focus { background: #43A047; color: #fff; }
+        #beginner-btn:hover:not(.active) { background: #66BB6A; }
+        #intermediate-btn { background: #2196F3; }
+        #intermediate-btn.active, #intermediate-btn:focus { background: #1976D2; color: #fff; }
+        #intermediate-btn:hover:not(.active) { background: #42A5F5; }
+        #advanced-btn { background: #FF5252; }
+        #advanced-btn.active, #advanced-btn:focus { background: #D32F2F; color: #fff; }
+        #advanced-btn:hover:not(.active) { background: #FF867C; }
+        #start-btn {
+            background: #FFD700;
+            color: #000;
+            border: none;
+            padding: 10px 24px;
+            margin: 10px 8px;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        #start-btn:hover { background: #FFA500; color: #fff; }
+        #pause-btn {
+            background: #00E5FF;
+            color: #000;
+            border: none;
+            padding: 10px 24px;
+            margin: 10px 8px;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        #pause-btn:hover { background: #00838F; color: #fff; }
+    </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="score-panel">
-            <div>Score: <span id="score">0</span></div>
-            <div>Lives: <span id="lives">3</span></div>
-            <div>Level: <span id="current-level">1</span></div>
+    <div id="game-container">
+        <div class="hud">
+            <span>Score: <span id="score">0</span></span>
+            <span>Lives: <span id="lives">3</span></span>
+            <span>Level: <span id="current-level">1</span></span>
         </div>
-
-        <canvas id="gameCanvas" width="570" height="660"></canvas>
-
-        <div class="controls">
-            <div class="difficulty-buttons">
-                <button id="beginner-btn" class="active easy-btn">Easy</button>
-                <button id="intermediate-btn" class="medium-btn">Medium</button>
-                <button id="advanced-btn" class="hard-btn">Hard</button>
-            </div>
-            <div class="game-buttons">
-                <button id="start-btn" class="start-btn">START</button>
-                <button id="pause-btn" class="pause-btn">PAUSE</button>
-            </div>
+        <div class="difficulty-buttons">
+            <button id="beginner-btn" class="active">Easy</button>
+            <button id="intermediate-btn">Medium</button>
+            <button id="advanced-btn">Hard</button>
         </div>
+        <button id="start-btn">START</button>
+        <button id="pause-btn">PAUSE</button>
+        <canvas id="game-canvas" width="570" height="630"></canvas>
     </div>
-
-    <audio id="pacman-music" src="assets/pacman-theme.mp3" loop></audio>
-
+    <audio id="bg-music" src="assets/music.mp3" loop></audio>
     <script src="js/constants.js"></script>
     <script src="js/levels.js"></script>
     <script src="js/sprites.js"></script>
     <script src="js/game.js"></script>
-    <script src="js/main.js"></script>
+    <script>
+        const bgMusic = document.getElementById('bg-music');
+        window.game = new Game('game-canvas');
+
+        document.getElementById('start-btn').onclick = function() {
+            bgMusic.currentTime = 0;
+            bgMusic.play();
+            game.start();
+        };
+
+        document.getElementById('pause-btn').onclick = function() {
+            if (game.gameState === GAME_STATES.PLAYING) {
+                game.togglePause();
+                bgMusic.pause();
+            } else if (game.gameState === GAME_STATES.PAUSED) {
+                game.togglePause();
+                bgMusic.play();
+            }
+        };
+
+        // Robust space bar or 'p' to pause/resume
+        window.addEventListener('keydown', function(e) {
+            // Accept ' ' (space), 'Spacebar', or 'Space' for compatibility
+            if (
+                (!e.repeat) &&
+                (
+                    e.code === 'Space' ||
+                    e.key === ' ' ||
+                    e.key === 'Spacebar' ||
+                    e.key.toLowerCase() === 'p'
+                )
+            ) {
+                e.preventDefault();
+                if (game.gameState === GAME_STATES.PLAYING) {
+                    game.togglePause();
+                    bgMusic.pause();
+                } else if (game.gameState === GAME_STATES.PAUSED) {
+                    game.togglePause();
+                    bgMusic.play();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
