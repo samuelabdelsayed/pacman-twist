@@ -1,50 +1,49 @@
-# Colorful Pacman Game
+# Pacman 🟡👻
 
-A modern implementation of the classic Pacman arcade game with enlarged graphics and three difficulty levels.
+A browser-based Pacman game with multiple difficulty levels, music, and a special Grim Reaper enemy for hard mode!
 
-## Features
+---
 
-- Colorful, enlarged graphics with vibrant visuals
-- Three difficulty levels: Beginner, Intermediate, and Advanced
-- Responsive design that adapts to different screen sizes
-- Power pellets that make ghosts vulnerable
-- Fruit bonuses for extra points
-- High score tracking via local storage
+## Features ✨
 
-## How to Play
+- **Classic Pacman gameplay** with smooth controls
+- **Three difficulty levels:** Easy, Medium, Hard
+- **START** and **PAUSE** buttons with distinct colors
+- **Keyboard controls:**  
+  - Use **arrow keys** to move  
+  - Press **Spacebar** or **P** to pause/resume the game
+- **Background music** that pauses/resumes with the game
+- **Grim Reaper enemy** appears in Hard mode!
 
-1. Select a difficulty level (Beginner recommended for new players)
-2. Click the "Start Game" button or press spacebar
-3. Control Pacman using the arrow keys or WASD
-4. Eat all dots while avoiding ghosts
-5. Power pellets make ghosts vulnerable temporarily
-6. Complete all three levels to win!
+---
 
-## Difficulty Levels
+## Grim Reaper 👹
 
-- **Beginner**: Simpler maze, fewer ghosts (2), slower ghost movement
-- **Intermediate**: Classic Pacman maze, 3 ghosts, medium difficulty
-- **Advanced**: Complex maze with more walls, all 4 ghosts, faster movement
+- The **Grim Reaper** is a special enemy that only appears in Hard mode.
+- It is now drawn in a **slightly darker grey** (`#555555`) for better visibility against the game background.
+- Behaves similarly to ghosts but is more challenging!
 
-## Technologies Used
+---
 
-- HTML5 Canvas for rendering
-- CSS3 for styling and animations
-- Vanilla JavaScript for game logic
-- Path-finding algorithms for ghost AI
-- Collision detection systems
-- Responsive design techniques
+## How to Play 🎮
 
-## Created with GitHub Copilot
+1. **Choose a difficulty** (Easy, Medium, Hard).
+2. **Click START** to begin.
+3. **Move Pacman** with the arrow keys.
+4. **Pause/Resume** with the **Spacebar** or **P** key, or use the PAUSE button.
+5. **Eat dots and avoid ghosts** (and the Grim Reaper in Hard mode)!
 
-This game was developed with assistance from GitHub Copilot, demonstrating how AI can be used to create engaging, interactive web applications. The project was developed in Visual Studio Code with the GitHub Copilot extension.
+---
 
-## Development
+## Development Notes 🛠️
 
-To run the game locally:
+- The Grim Reaper's color can be changed in `js/sprites.js`:
+  ```javascript
+  this.color = '#555555'; // Slightly darker grey for visibility
+  ```
+- The game state constants are made global in `js/constants.js` for reliable keyboard controls.
+- The spacebar and "P" key are handled robustly to pause/resume the game.
 
-1. Clone this repository
-2. Open index.html in your browser
-3. Alternatively, use a local server: `python -m http.server` or `npx http-server`
+---
 
-Enjoy the game!
+Enjoy playing Pacman! 🟡🍒👻
