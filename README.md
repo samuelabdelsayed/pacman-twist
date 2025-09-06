@@ -2,7 +2,7 @@
 
 A browser-based Pacman game with multiple difficulty levels, music, and a special Grim Reaper enemy for hard mode!
 
-![Pacman Twist Game Screenshot](images/pacman-twist.png)
+<img src="images/pacman-twist.png" alt="Pacman Twist Game Screenshot" width="50%">
 
 ---
 
