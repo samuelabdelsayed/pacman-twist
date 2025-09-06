@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const game = new Game('gameCanvas');
+    const game = new Game('game-canvas');
     window.game = game;
 
     // Music controls
-    const music = document.getElementById('pacman-music');
+    const music = document.getElementById('bg-music');
     document.getElementById('start-btn').addEventListener('click', () => {
+        game.start();
         if (music.paused) {
             music.currentTime = 0;
             music.volume = 0.5;
@@ -12,10 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     document.getElementById('pause-btn').addEventListener('click', () => {
-        if (game.gameState === 'playing') {
+        if (game.gameState === GAME_STATES.PLAYING) {
             game.togglePause();
             music.pause();
-        } else if (game.gameState === 'paused') {
+        } else if (game.gameState === GAME_STATES.PAUSED) {
             game.togglePause();
             if (music.paused) music.play();
         }
@@ -37,10 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('keydown', (e) => {
         if ((e.code === 'Space' || e.key === 'p' || e.key === 'P') && !e.repeat) {
             e.preventDefault();
-            if (game.gameState === 'playing') {
+            if (game.gameState === GAME_STATES.PLAYING) {
                 game.togglePause();
                 music.pause();
-            } else if (game.gameState === 'paused') {
+            } else if (game.gameState === GAME_STATES.PAUSED) {
                 game.togglePause();
                 if (music.paused) music.play();
             }

@@ -1,89 +1,125 @@
-body {
-    margin: 0;
-    padding: 20px;
-    background: #000;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+body { 
+    background: #000; 
+    color: #fff; 
+    font-family: Arial, sans-serif; 
 }
 
-.game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+#game-container { 
+    text-align: center; 
+    margin-top: 30px; 
 }
 
-.score-panel {
+canvas { 
+    background: #111; 
+    display: block; 
+    margin: 0 auto;
+    border: 2px solid #1919A6;
+}
+
+.hud { 
+    margin: 10px auto; 
     display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 570px;
-    font-size: 24px;
+    justify-content: space-around;
+    width: 570px;
+    font-size: 18px;
     font-weight: bold;
 }
 
-canvas {
-    border: 2px solid #1919A6;
-    background: #000;
-}
-
-.controls {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    max-width: 570px;
-}
-
-.difficulty-buttons,
-.game-buttons {
+.difficulty-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
+    margin-bottom: 10px;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
+.difficulty-buttons button {
     border: none;
-    border-radius: 5px;
-    color: white;
+    padding: 8px 18px;
+    margin: 0 4px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #fff;
+    transition: background 0.2s, color 0.2s;
+}
+
+#beginner-btn { 
+    background: #4CAF50; 
+}
+
+#beginner-btn.active, #beginner-btn:focus { 
+    background: #43A047; 
+    color: #fff; 
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+#beginner-btn:hover:not(.active) { 
+    background: #66BB6A; 
+}
+
+#intermediate-btn { 
+    background: #2196F3; 
+}
+
+#intermediate-btn.active, #intermediate-btn:focus { 
+    background: #1976D2; 
+    color: #fff; 
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+#intermediate-btn:hover:not(.active) { 
+    background: #42A5F5; 
+}
+
+#advanced-btn { 
+    background: #FF5252; 
+}
+
+#advanced-btn.active, #advanced-btn:focus { 
+    background: #D32F2F; 
+    color: #fff; 
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+#advanced-btn:hover:not(.active) { 
+    background: #FF867C; 
+}
+
+#start-btn {
+    background: #FFD700;
+    color: #000;
+    border: none;
+    padding: 10px 24px;
+    margin: 10px 8px;
+    border-radius: 4px;
+    font-size: 18px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-button:hover {
+#start-btn:hover { 
+    background: #FFA500; 
+    color: #fff; 
     transform: translateY(-2px);
-    filter: brightness(1.2);
 }
 
-/* Different colored buttons */
-.easy-btn {
-    background: #00AA00;
+#pause-btn {
+    background: #00E5FF;
+    color: #000;
+    border: none;
+    padding: 10px 24px;
+    margin: 10px 8px;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.medium-btn {
-    background: #DDAA00;
-}
-
-.hard-btn {
-    background: #CC0000;
-}
-
-.start-btn {
-    background: #1919A6;
-}
-
-.pause-btn {
-    background: #661966;
-}
-
-button.active {
-    box-shadow: 0 0 10px white;
-    transform: scale(1.1);
+#pause-btn:hover { 
+    background: #00838F; 
+    color: #fff; 
+    transform: translateY(-2px);
 }
